@@ -26,3 +26,4 @@
     - [org.web3j](docs/org.web3j.md)
     - [使用web3j管理以太坊账户](docs/eth_web3j.md)
     - [状态与交易](docs/eth_status_trade.md)
+    - [智能合约](docs/smartContract.md)
