@@ -66,6 +66,60 @@ String publicKey = keyPair.getPublicKey().toString(16);
 String account = Keys.getAddress(publicKey);
 ```
 
+### 导入私钥
+
+我们已经知道，只有私钥是最关键的，公钥和账户都可以从私钥一步步 推导出来。
+
+假如你之前已经通过其他方式有了一个账户，例如使用Metamask创建 的钱包，那么可以把该账户导入web3j。
+
+![json_rpc_web3j](img/import_private_key.png)
+
+使用org.web3j.crypto.ECKeyPair类的静态方法create()来导入 私钥。该方法有多个重载：
+
+* public static ECKeyPair create(KeyPair keyPair)
+  
+* public static ECKeyPair create(BigInteger privateKey)
+  
+* public static ECKeyPair create(byte[] privateKey)
+
+例如：
+
+```
+BigInteger privateKey = new BigInteger("133be114715e5fe528a1b8adf36792160601a2d63ab59d1fd454275b31328791",16);
+ECKeyPair keyPair = ECKeyPair.create(privateKey);
+String account = Keys.getAddress(keyPair);
+```
+
+### 使用钱包
+
+在web3j中，钱包这个概念对应的是加密的私钥文件。因此，在一个钱包中， 只能有一个私钥 —— 如果你需要在web3j中管理多个账户，就需要创建多个钱包 —— 这有别于我们通常提到的钱包应用的概念。
+
+使用org.web3j.crypto.WalletUtils类来管理钱包文件的创建和加载：
+
+![json_rpc_web3j](img/load.png)
+
+
+例如，下面的代码将在使用密码123在./keystore目录下创建一个新的钱包文件：
+
+```
+String pass = "123";
+File destDir = new File("./keystore");
+String fn = WalletUtils.generateWalletFile(pass,keyPair,destDir,true);
+```
+
+钱包文件名中包含了创建时间和对应的账户地址：
+
+![json_rpc_web3j](img/account.png)
+
+除了generateWalletFile()，WalletUtils中也提供了一些简化的方法：
+
+* public static String generateWalletFile(String password, ECKeyPair ecKeyPair, File destinationDirectory, boolean useFullScrypt)
+* public static String generateNewWalletFile(String password, File destinationDirectory, boolean useFullScrypt)
+* public static String generateLightNewWalletFile(String password, File destinationDirectory)
+* public static String generateFullNewWalletFile(String password, File destinationDirectory)
+
+
+### 账户凭证
 钱包文件中保存的是加密后的私钥，显然，只要持有生成钱包文件时的密码， 就可以恢复私钥，进而重新获得公钥和账户地址：
 
 ![json_rpc_web3j](img/eth_crypto1.png)
