@@ -27,3 +27,4 @@
     - [使用web3j管理以太坊账户](docs/eth_web3j.md)
     - [状态与交易](docs/eth_status_trade.md)
     - [智能合约](docs/smartContract.md)
+    - [过滤器与事件](docs/filter_event.md)
